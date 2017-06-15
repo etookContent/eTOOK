@@ -44,6 +44,15 @@
 		private var isClick:Boolean = false;
 		private var help_load:Loader;
 		
+			ServiceBase.setUp("http://etooklms.com","b58782e93c105cc10e3bc5a0de86e6fb");
+
+			var srevice1:GetSavedInfo = new GetSavedInfo();
+            srevice1.addEventListener(Event.COMPLETE, service1Loaded);
+            srevice1.load(2,12,1);
+			function service1Loaded(e:*=null):void
+			{
+				throw "Hi the service result is : "+srevice1;
+			}
 		public function mainMenuManager() 
 		{
 			
