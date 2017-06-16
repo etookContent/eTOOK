@@ -1,7 +1,8 @@
 ﻿package eTook_Engin.H_I_Main_Menu {
 	
 	import flash.display.MovieClip;
-	import flash.net.URLLoader;
+import flash.events.IOErrorEvent;
+import flash.net.URLLoader;
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	import eTook_Engin.H_I_Value.H_I_Value;
@@ -19,9 +20,16 @@
 	import eTook_Engin.H_I_XML.H_I_XmlReader;
 	import flash.media.SoundMixer;
 	import eTook_Engin.H_I_Utility.H_I_ConvertFA;
-	
-	
-	public class H_I_mainMenuManager extends MovieClip {
+	import flash.display.DisplayObject;
+import flash.utils.setTimeout;
+
+import moodelService.local_playertrack_get_progress;
+
+import moodelService.ServiceBase;
+import moodelService.local_playertrack_set_progress;
+
+
+public class H_I_mainMenuManager extends MovieClip {
 		private var mc__:MovieClip 
 		private var Menu_Button:H_I_CreateButton
 		private var menu_X:Number;
@@ -43,16 +51,90 @@
 		private var change_:Boolean = false;
 		private var isClick:Boolean = false;
 		private var help_load:Loader;
-		
-			ServiceBase.setUp("http://etooklms.com","b58782e93c105cc10e3bc5a0de86e6fb");
 
-			var srevice1:GetSavedInfo = new GetSavedInfo();
-            srevice1.addEventListener(Event.COMPLETE, service1Loaded);
-            srevice1.load(2,12,1);
-			function service1Loaded(e:*=null):void
-			{
-				throw "Hi the service result is : "+srevice1;
-			}
+        /**Media parameters to save last status to the server*/
+		private static var 	userid:uint = 2,
+							courseid:uint = 12,
+							idnumber:uint = 1;
+
+        /**State saver interval in miliseconds*/
+        private static const SaveDelay:uint = 10000 ;
+
+
+		public function H_I_mainMenuManager()
+		{
+			super();
+
+
+			ServiceBase.setUp("http://etooklms.com","b58782e93c105cc10e3bc5a0de86e6fb");
+            loadCurrentState();
+		}
+
+    /**Get the user last status from server*/
+    private function loadCurrentState(e:*=null):void {
+
+        var srevice1:local_playertrack_get_progress = new local_playertrack_get_progress();
+        srevice1.addEventListener(Event.COMPLETE, onLastStateLoaded);
+        srevice1.addEventListener(IOErrorEvent.IO_ERROR, loadCurrentState);//Reload last state
+        srevice1.load(userid,courseid ,idnumber);
+    }
+
+    /**User state loaded*/
+    private function onLastStateLoaded(e:Event):void
+    {
+        var srevice:local_playertrack_get_progress = e.currentTarget as local_playertrack_get_progress ;
+        try {
+            var loadedState:Object = JSON.parse(JSON.parse(srevice.data) as String);
+            trace("** server data is : "+srevice.data);
+            trace("***loaded state is : "+loadedState);
+            trace("**** Last state that loaded is : "+JSON.stringify(loadedState));
+            if (
+                    loadedState.Progress_Menu != null && loadedState.Progress_Menu.length > 0
+                    &&
+                    loadedState.Complete_Progress_Menu != null && loadedState.Complete_Progress_Menu.length > 0
+            ) {
+                trace("***** Loaded data is detectable!");
+                H_I_Value.Progress_Menu = loadedState.Progress_Menu;
+                H_I_Value.Complete_Progress_Menu = loadedState.Complete_Progress_Menu;
+
+                for (var i = 0; i < H_I_Value.Progress_Menu.length; i++) {
+                    if (H_I_Value.Complete_Progress_Menu[i]) {
+                        H_I_Value.STAGE.dispatchEvent(new Event(h_i_Event_eTook.PROGRESS_PLAY, true, true));
+                    }
+                }
+            }
+        }
+        catch (e){};
+        StartSavingTheUserState();
+    }
+
+    /**Save the user state after a delay*/
+    private function StartSavingTheUserState(e:*=null):void
+    {
+        setTimeout(saveCurrentState,SaveDelay);
+    }
+
+		/**Save the current state of the media to moodle*/
+		private function saveCurrentState():void
+		{
+            trace("Now is time to save current status");
+			var toSaveObj:Object = {};
+			toSaveObj.Progress_Menu = H_I_Value.Progress_Menu;
+			toSaveObj.Complete_Progress_Menu = H_I_Value.Complete_Progress_Menu;
+			var toSaveJSON:String = JSON.stringify(toSaveObj);
+            trace("Save this : "+toSaveJSON);
+
+			var saver:local_playertrack_set_progress = new local_playertrack_set_progress();
+			saver.load(userid,courseid,idnumber,toSaveJSON);
+            saver.addEventListener(Event.COMPLETE, userStateSavedSuccessfully);
+            saver.addEventListener(IOErrorEvent.IO_ERROR, StartSavingTheUserState);//Retry to save last state
+		}
+
+        private function userStateSavedSuccessfully(event:Event):void {
+            trace("********************User data is saved now******************");
+            StartSavingTheUserState();
+        }
+		
 		public function mainMenuManager() 
 		{
 			
@@ -64,6 +146,9 @@
 				H_I_Value.STAGE = this.stage
 			
 			H_I_Value.Progress_Menu = new Array();
+			
+
+			
 			H_I_Value.Complete_Progress_Menu = new Array();
 			initialize();
 			menu_X = menu.x;
@@ -87,6 +172,7 @@
 				H_I_Value.Progress_Menu[i]=0;
 				H_I_Value.Complete_Progress_Menu[i]=false;
 			}
+			//Update progress after here
 		}
 		public function dispose()
 		{
@@ -914,6 +1000,7 @@
 						
 						if(MovieClip(menu.b.getChildByName(H_I_Value.current_name_play)).Progress_mc.Progress.width < H_I_Value.Progress_Menu[H_I_Value.Index])
 						{
+							//Here is the progress bars
 							MovieClip(menu.b.getChildByName(H_I_Value.current_name_play)).Progress_mc.Progress.width = H_I_Value.Progress_Menu[H_I_Value.Index]
 							H_I_Value.Progress_Menu[H_I_Value.Index] =location_*2
 							
