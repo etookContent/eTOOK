@@ -1,6 +1,7 @@
 ﻿package eTook_Engin.H_I_Main_Menu {
 	
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
 	import flash.events.Event;
@@ -23,6 +24,9 @@ import flash.net.navigateToURL;
 	import flash.media.SoundMixer;
 	import eTook_Engin.H_I_Utility.H_I_ConvertFA;
 	import flash.display.DisplayObject;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
 import moodelService.local_playertrack_get_progress;
@@ -60,14 +64,17 @@ public class H_I_mainMenuManager extends MovieClip {
 							idnumber:uint = 1;
 
         /**Change it to null on final release*/
-        private static var debugSWF_URL:String = "http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf?courseid=12&userid=185&idnumber=1",
-                            debugDomain:String = "http://etooklms.com/";
+        private static var debugSWF_URL:String = null,//"http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf?courseid=12&userid=185&idnumber=1",
+                            debugDomain:String = null;//"http://etooklms.com/";
 
         /**State saver interval in miliseconds*/
         private static const SaveDelay:uint = 10000 ;
 
         /**This is the moodles tocken*/
         private static const tocken:String = "b58782e93c105cc10e3bc5a0de86e6fb";
+
+    /**Save state time out id*/
+    private var saveTimeOutId:uint;
 
 
 
@@ -85,10 +92,12 @@ public class H_I_mainMenuManager extends MovieClip {
 
             var domainList:Array = swfURL.match(/http[s]{0,1}:\/\/[a-z\d\.]+[\\\/]/i);
             var domain:String = (domainList!=null)?domainList[0]:debugDomain;
+            trace("Founded domain is : "+domain);
 
             if(domain==null)
             {
-                throw "The SWF's domain is not detectable.";
+                addDebugger("The SWF's domain is not detectable.\nSWF URL is : "+swfURL+"\nDetected Domain is : "+domainList);
+                return ;
             }
 
             var OtherParams:URLVariables = new URLVariables(swfURL.substring(swfURL.lastIndexOf('?')+1));
@@ -97,15 +106,40 @@ public class H_I_mainMenuManager extends MovieClip {
             courseid = uint(OtherParams.courseid) ;
             idnumber = uint(OtherParams.idnumber) ;
 
-            if(userid==0)
+            if(userid==0 || courseid==0 || idnumber==0)
             {
-                throw "The swf parameters cannot parse.";
+                addDebugger("The swf parameters cannot parse.\nuserid="+userid+"\ncourseid="+courseid+"\nidnumber="+idnumber);
+                return;
             }
 
 
 			ServiceBase.setUp(domain,tocken);
             loadCurrentState();
 		}
+
+    /**Add the debugger to the stage*/
+    private function addDebugger(UserHint:String):void
+    {
+        var maskMC:Sprite = new Sprite();
+        stage.addChild(maskMC);
+        maskMC.graphics.beginFill(0xffffff,0.8);
+        maskMC.graphics.drawRect(0,0,stage.stageWidth,stage.stageHeight);
+        var texter:TextField = new TextField();
+        stage.addChild(texter);
+        texter.width = stage.stageWidth;
+        texter.height = stage.stageHeight;
+        texter.defaultTextFormat = new TextFormat("Arial",30);
+        texter.wordWrap = true ;
+        trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"+UserHint);
+        texter.text = UserHint ;
+
+        stage.addEventListener(MouseEvent.CLICK,clearMe);
+        function clearMe(e:*=null)
+        {
+            stage.removeChild(texter);
+            stage.removeChild(maskMC);
+        }
+    }
 
     /**Get the user last status from server*/
     private function loadCurrentState(e:*=null):void {
@@ -148,12 +182,13 @@ public class H_I_mainMenuManager extends MovieClip {
     /**Save the user state after a delay*/
     private function StartSavingTheUserState(e:*=null):void
     {
-        setTimeout(saveCurrentState,SaveDelay);
+        saveTimeOutId = setTimeout(saveCurrentState,SaveDelay);
     }
 
 		/**Save the current state of the media to moodle*/
 		private function saveCurrentState():void
 		{
+            clearTimeout(saveTimeOutId);
             trace("Now is time to save current status");
 			var toSaveObj:Object = {};
 			toSaveObj.Progress_Menu = H_I_Value.Progress_Menu;
@@ -1047,6 +1082,8 @@ public class H_I_mainMenuManager extends MovieClip {
 					{
 						H_I_Value.Complete_Progress_Menu[H_I_Value.Index] = true;
 						H_I_Value.STAGE.dispatchEvent(new Event(h_i_Event_eTook.PROGRESS_PLAY,true,true));
+                        //Save the user state now
+                        saveCurrentState();
 					}
 					if(H_I_Value.is_CP[H_I_Value.Index-1]=="false")
 					{
