@@ -15,6 +15,7 @@ public class local_playertrack_get_progress extends ServiceBase {
 
     public function load(userid:uint,courseid:uint,idnumber:uint)
     {
+        trace("Get player progress for : userid="+userid+" courseid="+courseid+" idnumber="+idnumber);
         super.loadParam({userid:userid,courseid:courseid,idnumber:idnumber});
     }
 }

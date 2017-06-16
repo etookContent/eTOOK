@@ -14,7 +14,9 @@ import flash.net.URLLoader;
 	import eTook_Engin.H_I_Encrypt.H_I_Decrypt;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
-	import flash.net.navigateToURL;
+import flash.net.URLVariables;
+import flash.net.URLVariables;
+import flash.net.navigateToURL;
 	import flash.system.LoaderContext;
 	import eTook_Engin.H_I_XML.H_I_XML_Structure;
 	import eTook_Engin.H_I_XML.H_I_XmlReader;
@@ -54,19 +56,54 @@ public class H_I_mainMenuManager extends MovieClip {
 
         /**Media parameters to save last status to the server*/
 		private static var 	userid:uint = 2,
-							courseid:uint = 12,
+                            courseid:uint = 12,
 							idnumber:uint = 1;
+
+        /**Change it to null on final release*/
+        private static var debugSWF_URL:String = "http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf?courseid=12&userid=185&idnumber=1",
+                            debugDomain:String = "http://etooklms.com/";
 
         /**State saver interval in miliseconds*/
         private static const SaveDelay:uint = 10000 ;
 
+        /**This is the moodles tocken*/
+        private static const tocken:String = "b58782e93c105cc10e3bc5a0de86e6fb";
 
-		public function H_I_mainMenuManager()
+
+
+    public function H_I_mainMenuManager()
 		{
 			super();
 
+            var swfURL:String;
+            if(debugSWF_URL==null) {
+                swfURL = this.loaderInfo.url;
+            }
+            else {
+                swfURL = debugSWF_URL ;
+            }
 
-			ServiceBase.setUp("http://etooklms.com","b58782e93c105cc10e3bc5a0de86e6fb");
+            var domainList:Array = swfURL.match(/http[s]{0,1}:\/\/[a-z\d\.]+[\\\/]/i);
+            var domain:String = (domainList!=null)?domainList[0]:debugDomain;
+
+            if(domain==null)
+            {
+                throw "The SWF's domain is not detectable.";
+            }
+
+            var OtherParams:URLVariables = new URLVariables(swfURL.substring(swfURL.lastIndexOf('?')+1));
+            trace("Detected params are : "+JSON.stringify(OtherParams));
+            userid = uint(OtherParams.userid) ;
+            courseid = uint(OtherParams.courseid) ;
+            idnumber = uint(OtherParams.idnumber) ;
+
+            if(userid==0)
+            {
+                throw "The swf parameters cannot parse.";
+            }
+
+
+			ServiceBase.setUp(domain,tocken);
             loadCurrentState();
 		}
 
