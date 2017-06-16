@@ -5,11 +5,11 @@ package moodelService {
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
-public class GetSavedInfo extends ServiceBase {
+public class local_playertrack_get_progress extends ServiceBase {
 
 
 
-    public function GetSavedInfo() {
+    public function local_playertrack_get_progress() {
         super("local_playertrack_get_progress");
     }
 
