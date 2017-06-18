@@ -46,5 +46,12 @@
 		public static var is_Big_Main:Boolean = false
 		public static var is_CP:Array;
 		public static var is_Free:Boolean;
+		
+		public static var padkast_Array:Array;
+		public static var takalif_Array:Array;
+		public static var azmoon_Array:Array;
+		public static var alpha_:Number;
+		
+		
 	}
 }

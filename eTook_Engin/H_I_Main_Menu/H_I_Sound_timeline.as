@@ -26,7 +26,7 @@
 			location_ = 50
 			ACtion_Function = sund_vol_view;
 			Action_Function_UP = Action_Function_UP_;
-			baseX = 121
+			baseX = 120
 			super.start_();
 			addEvent()
 		}

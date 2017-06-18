@@ -33,5 +33,11 @@
 		public static const Reset:String = "reset"
 		public static const Close_Help:String = "close_help"
 		public static const MUTE_SOUND:String = "mute_sound"
+		public static const NEXT_QUIZE:String = "next_quize"
+		public static const FALSE_ANSWER:String = "false_answer"
+		public static const DISABLE_EVENT_multiChooice:String = "disable_event_multichooice"
+		public static const ENABLE_EVENT_multiChooice:String = "enable_event_multichooice"
+		public static const SET_ALPHA:String = "set_alpha"
+		
 	}
 }
