@@ -46,7 +46,7 @@ public class H_I_mainMenuManager extends MovieClip {
 		private var url:URLLoader = new URLLoader()
 		private var xml:XML;
 		private var user_xml:XML;
-		private var btn_Arr:Array = ["ostad","ahdaf","gallery","video_btn","zamaem_btn","pdf_btn","help_btn"]
+		private var btn_Arr:Array = ["ostad","ahdaf","gallery","video_btn","zamaem_btn","pdf_btn","help_btn"]//,"padkast","takalif","azmoon"]
 		private var count_off:Number =7;
 		private var old_ch:Number = 0;
 		private var cs:Number=0
@@ -225,6 +225,7 @@ public class H_I_mainMenuManager extends MovieClip {
 			initialize();
 			menu_X = menu.x;
 			url.addEventListener(Event.COMPLETE,CXL)
+			//trace("path    "+path)
 			url.load(new URLRequest(path))
 			//var ld_XML_:H_I_XmlReader = new H_I_XmlReader();
 			//H_I_XmlReader.XMLLoad(H_I_XML_Structure.temp_xml)
@@ -267,9 +268,15 @@ public class H_I_mainMenuManager extends MovieClip {
 			if(menu_item.ahdaf.ahdaf)
 				menu_item.ahdaf.ahdaf.addEventListener(MouseEvent.CLICK,menuBtn);
 			
-			if(menu_item.help_btn.help_btn)
+			/*if(menu_item.help_btn.help_btn)
 				menu_item.help_btn.help_btn.addEventListener(MouseEvent.CLICK,menuBtn);
-				
+			if(menu_item.padkast.padkast)
+				menu_item.padkast.padkast.addEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.takalif.takalif)
+				menu_item.takalif.takalif.addEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.azmoon.azmoon)
+				menu_item.azmoon.azmoon.addEventListener(MouseEvent.CLICK,menuBtn);
+				*/
 			if(mute_mc)
 			{
 				mute_mc.addEventListener(MouseEvent.CLICK,mute_mouse_click)
@@ -294,7 +301,14 @@ public class H_I_mainMenuManager extends MovieClip {
 				
 			if(menu_item.help_btn.help_btn)
 				menu_item.help_btn.help_btn.removeEventListener(MouseEvent.CLICK,menuBtn);
-				
+			
+			/*if(menu_item.padkast.padkast)
+				menu_item.padkast.padkast.removeEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.takalif.takalif)
+				menu_item.takalif.takalif.removeEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.azmoon.azmoon)
+				menu_item.azmoon.azmoon.removeEventListener(MouseEvent.CLICK,menuBtn);
+			*/
 			if(mute_mc)
 			{
 				mute_mc.removeEventListener(MouseEvent.CLICK,mute_mouse_click)
@@ -348,6 +362,7 @@ public class H_I_mainMenuManager extends MovieClip {
 		
 		private function menuBtn(e:MouseEvent)
 		{
+			//trace("e.currentTarget.name    "+e.currentTarget.name)
 			if(menu_item.list_button.currentFrame==2)
 			{
 				MC_List_menu(null);
@@ -394,6 +409,43 @@ public class H_I_mainMenuManager extends MovieClip {
 					helpLoad()
 					this.dispatchEvent(new Event(h_i_Event_eTook.PLAY_RESUME,true))
 				break;
+				case "padkast":
+					if(String(xml[0].@padkastF).length != 0 && String(xml[0].@padkastF != undefined))
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(xml[0].@padkastF)));
+					}
+					else if(H_I_Value.padkast_Array[H_I_Value.Index-1] != null)
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(H_I_Value.padkast_Array[H_I_Value.Index-1])));
+					}
+							
+					this.dispatchEvent(new Event(h_i_Event_eTook.PLAY_RESUME,true))
+				break;
+				case "takalif":
+					if(String(xml[0].@takalifF).length != 0 && String(xml[0].@takalifF != undefined))
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(xml[0].@takalifF)));
+					}
+					else if(H_I_Value.takalif_Array[H_I_Value.Index-1] != null)
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(H_I_Value.takalif_Array[H_I_Value.Index-1])));
+					}
+							
+					this.dispatchEvent(new Event(h_i_Event_eTook.PLAY_RESUME,true))
+				break;
+				case "azmoon":
+					if(String(xml[0].@azmoonF).length != 0 && String(xml[0].@azmoonF != undefined))
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(xml[0].@azmoonF)));
+					}
+					else if(H_I_Value.azmoon_Array[H_I_Value.Index-1] != null)
+					{
+						navigateToURL(new URLRequest(H_I_Value.plus_path+String(H_I_Value.azmoon_Array[H_I_Value.Index-1])));
+					}
+							
+					this.dispatchEvent(new Event(h_i_Event_eTook.PLAY_RESUME,true))
+				break;
+				
 			}
 			
 			
@@ -413,13 +465,13 @@ public class H_I_mainMenuManager extends MovieClip {
 		}
 		public function Enable_Button_Menu()
 		{
-			H_I_Value.video_Array[H_I_Value.Index-1][0].*.length()
+			/*H_I_Value.video_Array[H_I_Value.Index-1][0].*.length()
 			
 			H_I_Value.gallery_Array[H_I_Value.Index-1][0].*.length()
 			
 			H_I_Value.attachment_Array[H_I_Value.Index-1][0].*.length()
 			
-			H_I_Value.attachment_Array[H_I_Value.Index-1][0].*.length()
+			H_I_Value.attachment_Array[H_I_Value.Index-1][0].*.length()*/
 			
 			
 			menu_item.list_button.list_button.addEventListener(MouseEvent.CLICK,MC_List_menu);
@@ -435,6 +487,13 @@ public class H_I_mainMenuManager extends MovieClip {
 				menu_item.ostad.ostad.addEventListener(MouseEvent.CLICK,menuBtn);
 			if(menu_item.ahdaf.ahdaf)
 				menu_item.ahdaf.ahdaf.addEventListener(MouseEvent.CLICK,menuBtn);
+				
+			/*if(menu_item.padkast.padkast)
+				menu_item.padkast.padkast.addEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.takalif.takalif)
+				menu_item.takalif.takalif.addEventListener(MouseEvent.CLICK,menuBtn);
+			if(menu_item.azmoon.azmoon)
+				menu_item.azmoon.azmoon.addEventListener(MouseEvent.CLICK,menuBtn);*/
 			
 		}
 		public function manageButton()
@@ -518,34 +577,97 @@ public class H_I_mainMenuManager extends MovieClip {
 		}
 		private function enable_disable()
 		{
+			
+			//ویرایش true= false شد
 
-			if((String(xml[0].@zamaem)=="true" || String(xml[0].@zamaem)=="dis")&& H_I_Value.attachment_Array[H_I_Value.Index-1]==undefined)
+			if((String(xml[0].@zamaem)=="false" || String(xml[0].@zamaem)=="dis")&& H_I_Value.attachment_Array[H_I_Value.Index-1]==undefined)
 			{
 				menu_item.zamaem_btn.zamaem_btn.mouseEnabled = false;
-				menu_item.zamaem_btn_enabled.visible = true;
+				menu_item.zamaem_btn_enabled.visible = false;
 			}else
 			{
 				menu_item.zamaem_btn.zamaem_btn.mouseEnabled = true;
-				menu_item.zamaem_btn_enabled.visible = false;
+				menu_item.zamaem_btn_enabled.visible = true;
 			}
-			if((String(xml[0].@film)=="true" || String(xml[0].@film)=="dis")&& H_I_Value.video_Array[H_I_Value.Index-1]==undefined)
+			if((String(xml[0].@film)=="false" || String(xml[0].@film)=="dis")&& H_I_Value.video_Array[H_I_Value.Index-1]==undefined)
 			{
 				menu_item.video_btn.video_btn.mouseEnabled = false;
-				menu_item.video_btn_enabled.visible = true;
+				menu_item.video_btn_enabled.visible = false;
 			}else
 			{
 				menu_item.video_btn.video_btn.mouseEnabled = true;
-				menu_item.video_btn_enabled.visible = false;
+				menu_item.video_btn_enabled.visible = true;
 			}
-			if((String(xml[0].@gallery)=="true" || String(xml[0].@gallery)=="dis") && H_I_Value.gallery_Array[H_I_Value.Index-1]==undefined)
+			if((String(xml[0].@gallery)=="false" || String(xml[0].@gallery)=="dis") && H_I_Value.gallery_Array[H_I_Value.Index-1]==undefined)
 			{
 				menu_item.gallery.gallery.mouseEnabled = false;
-				menu_item.gallery_enabled.visible = true;
+				menu_item.gallery_enabled.visible = false;
 			}else
 			{
 				menu_item.gallery.gallery.mouseEnabled = true;
-				menu_item.gallery_enabled.visible = false;
+				menu_item.gallery_enabled.visible = true;
 			}
+			/*if((String(xml[0].@padkast)=="false" || String(xml[0].@padkast)=="dis") && H_I_Value.padkast_Array[H_I_Value.Index-1]==undefined)
+			{
+				menu_item.padkast.padkast.mouseEnabled = false;
+				menu_item.padkast_enabled.visible = false;
+			}else
+			{
+				menu_item.padkast.padkast.mouseEnabled = true;
+				menu_item.padkast_enabled.visible = true;
+			}
+			if((String(xml[0].@takalif)=="false" || String(xml[0].@takalif)=="dis") && H_I_Value.takalif_Array[H_I_Value.Index-1]==undefined)
+			{
+				menu_item.takalif.takalif.mouseEnabled = false;
+				menu_item.takalif_enabled.visible = false;
+			}else
+			{
+				menu_item.takalif.takalif.mouseEnabled = true;
+				menu_item.takalif_enabled.visible = true;
+			}
+			//trace((String(xml[0].@azmoon)+String(xml[0].@azmoon)))
+			if((String(xml[0].@azmoon)=="false" || String(xml[0].@azmoon)=="dis") && H_I_Value.azmoon_Array[H_I_Value.Index-1]==undefined)
+			{
+				menu_item.azmoon.azmoon.mouseEnabled = false;
+				menu_item.azmoon_enabled.visible = false;
+			}else
+			{
+				menu_item.azmoon.azmoon.mouseEnabled = true;
+				menu_item.azmoon_enabled.visible = true;
+			}*/
+			if(!menu_item.ostad.visible)
+				menu_item.ostad_enabled.visible = false;
+				
+			if(!menu_item.gallery.visible)
+				menu_item.gallery_enabled.visible = false;
+			
+			
+			if(!menu_item.video_btn.visible)
+				menu_item.video_btn_enabled.visible = false;
+			
+			if(!menu_item.zamaem_btn.visible)
+				menu_item.zamaem_btn_enabled.visible = false;
+			
+			if(!menu_item.pdf_btn.visible)
+				menu_item.pdf_btn_enabled.visible = false;
+				
+			if(!menu_item.help_btn.visible)
+				menu_item.help_btn_enabled.visible = false;
+				
+			/*if(!menu_item.padkast.visible)
+				menu_item.padkast_enabled.visible = false;
+				
+			if(!menu_item.takalif.visible)
+				menu_item.takalif_enabled.visible = false;
+				
+			if(!menu_item.takalif.visible)
+				menu_item.takalif_enabled.visible = false;
+			*/
+			
+			
+			//trace("menu_item.azmoon_enabled.visible     "+menu_item.padkast_enabled.visible)
+			//trace("menu_item.azmoon_enabled.visible     "+menu_item.takalif_enabled.visible)
+			//trace("menu_item.azmoon_enabled.visible     "+menu_item.azmoon_enabled.visible)
 		}
 		private function NBCK(e:MouseEvent)
 		{
@@ -623,7 +745,7 @@ public class H_I_mainMenuManager extends MovieClip {
 			resetButton();
 			ckeck_enabled()
 			unload_();
-			
+			trace("ld path   "+(H_I_Value.plus_path+H_I_Value.SLID_PATH))
 			H_I_LoaderManager.UrlLoader(H_I_Value.SLID_PATH,H_I_Value.plus_path+H_I_Value.SLID_PATH,LCF,P_Load,E_Load,URLLoaderDataFormat.BINARY);
 			H_I_Value.OLD_PATH = H_I_Value.SLID_PATH;
 		}
@@ -645,20 +767,16 @@ public class H_I_mainMenuManager extends MovieClip {
 			
 			if(go_to==1)
 			{
-				trace("a1")
 				for(var i=0;i<H_I_Value.maxIndex_Chapter.length;i++)
 				{
 					if(H_I_Value.maxIndex_Chapter[i]>=H_I_Value.Index)
 					{
-						trace("1_1")
 						if(old_ch != (i+1))
 						{
-							trace("1_2")
 							old_ch = i+1;
 							cs = 0;
 							if(!isN)
 							{
-								trace("1_3")
 								cs= H_I_Value.maxIndex_Chapter[i] -counter_(i)
 								/*if(i==0)
 								{
@@ -698,7 +816,6 @@ public class H_I_mainMenuManager extends MovieClip {
 				}
 			}else if(go_to==2)
 			{
-				trace("a2")
 				go_to = 3;
 				if(xml[0].@title != undefined)
 				{
@@ -752,13 +869,11 @@ public class H_I_mainMenuManager extends MovieClip {
 				currentslid_mc.currentslid2_txt.text = String(ci)
 			}else
 			{
-				trace("a3")
 				if(!isN)
 				{
 					cs = Number(currentslid_mc.currentslid_txt.text)
 					if(cs-1==0)
 					{
-						trace("err")
 						change_ = true;
 						old_ch = 2
 						go_to = 1;
@@ -812,7 +927,6 @@ public class H_I_mainMenuManager extends MovieClip {
 			loader_calc.visible = false;
 			if(H_I_Value.is_Big_Main)
 			{
-				trace("width     "+(H_I_LoaderManager.getLoader(H_I_Value.SLID_PATH+"Byte").width))
 				if(H_I_Value.is_CP[H_I_Value.Index-1]=="true" && H_I_LoaderManager.getLoader(H_I_Value.SLID_PATH+"Byte").width>881)
 				{
 					H_I_LoaderManager.getLoader(H_I_Value.SLID_PATH+"Byte").width = 881
@@ -856,6 +970,41 @@ public class H_I_mainMenuManager extends MovieClip {
 			}
 			
 			
+			/*if(String(xml[0].@padkastF).length == 0 )
+			{
+				if(H_I_Value.padkast_Array[H_I_Value.Index-1] != null)
+				{
+					menu_item.padkast_enabled.visible = false;
+				}else
+				{
+					menu_item.padkast_enabled.visible = true;
+				}
+			}
+			
+			if(String(xml[0].@takalifF).length == 0 )
+			{
+				if(H_I_Value.takalif_Array[H_I_Value.Index-1] != null)
+				{
+					menu_item.takalif_enabled.visible = false;
+				}else
+				{
+					menu_item.takalif_enabled.visible = true;
+				}
+			}
+			
+			if(String(xml[0].@azmoonF).length == 0 )
+			{
+				if(H_I_Value.azmoon_Array[H_I_Value.Index-1] != null)
+				{
+					menu_item.azmoon_enabled.visible = false;
+				}else
+				{
+					menu_item.azmoon_enabled.visible = true;
+				}
+			}
+			
+*/			
+			
 		}
 		private function unload_()
 		{
@@ -879,7 +1028,9 @@ public class H_I_mainMenuManager extends MovieClip {
 			url.removeEventListener(Event.COMPLETE,CXL)
 			Menu_Button = new H_I_CreateButton(menu.b)
 			xml = new XML(e.target.data);
-			//H_I_Value.plus_path = String(xml[0].@plusPath)
+			//trace("H_I_Value.plus_path    "+H_I_Value.plus_path)
+			if(H_I_Value.plus_path!="data/")
+				H_I_Value.plus_path = H_I_Value.plus_path+String(xml[0].@plusPath)
 			Menu_Button.start_creat(xml)
 			if(this.getChildByName("eventButton") != null)
 				MovieClip(this).eventButton.start_();
@@ -932,6 +1083,27 @@ public class H_I_mainMenuManager extends MovieClip {
 				menu_item.ostad_enabled.visible = false;
 				count_off-=1;
 			}
+			
+			/*if(String(xml[0].@padkast)=="false")
+			{
+				menu_item.padkast.visible = false;
+				menu_item.padkast_enabled.visible = false;
+				count_off-=1;
+			}
+			
+			if(String(xml[0].@takalif)=="false")
+			{
+				menu_item.takalif.visible = false;
+				menu_item.takalif_enabled.visible = false;
+				count_off-=1;
+			}
+			
+			if(String(xml[0].@azmoon)=="false")
+			{
+				menu_item.azmoon.visible = false;
+				menu_item.azmoon_enabled.visible = false;
+				count_off-=1;
+			}*/
 		}
 		private function disable()
 		{
@@ -942,6 +1114,11 @@ public class H_I_mainMenuManager extends MovieClip {
 			menu_item.gallery_enabled.visible = false;
 			menu_item.ahdaf_enabled.visible = false;
 			menu_item.ostad_enabled.visible = false;
+			
+			/*menu_item.padkast_enabled.visible = false;
+			menu_item.takalif_enabled.visible = false;
+			menu_item.azmoon_enabled.visible = false;*/
+			
 			if(String(xml[0].@pdfon)=="dis")
 			{
 				menu_item.pdf_btn.pdf_btn.gotoAndStop(2)
@@ -977,6 +1154,27 @@ public class H_I_mainMenuManager extends MovieClip {
 				menu_item.ostad.ostad.mouseEnabled = false;
 				menu_item.ostad_enabled.visible = true;
 			}
+			
+			
+			/*if(String(xml[0].@padkast)=="dis")
+			{
+				menu_item.padkast.padkast.mouseEnabled = false;
+				menu_item.padkast_enabled.visible = true;
+			}
+			
+			if(String(xml[0].@takalif)=="dis")
+			{
+				menu_item.takalif.takalif.mouseEnabled = false;
+				menu_item.takalif_enabled.visible = true;
+			}
+			
+			if(String(xml[0].@azmoon)=="dis")
+			{
+				menu_item.azmoon.azmoon.mouseEnabled = false;
+				menu_item.azmoon_enabled.visible = true;
+			}*/
+			
+			
 		}
 		private function set_position_y()
 		{
@@ -997,7 +1195,6 @@ public class H_I_mainMenuManager extends MovieClip {
 					{
 						if(valid[jj])
 						{
-							//trace(menu_item.getChildByName(btn_Arr[ii]).name+"       "+menu_item.getChildByName(btn_Arr[jj]).name+"       "+y_[ii])
 							menu_item.getChildByName(btn_Arr[jj]).y = y_[ii]
 							menu_item.getChildByName(btn_Arr[jj]+"_enabled").y = y_[ii]
 							
@@ -1072,7 +1269,6 @@ public class H_I_mainMenuManager extends MovieClip {
 						
 						if(MovieClip(menu.b.getChildByName(H_I_Value.current_name_play)).Progress_mc.Progress.width < H_I_Value.Progress_Menu[H_I_Value.Index])
 						{
-							//Here is the progress bars
 							MovieClip(menu.b.getChildByName(H_I_Value.current_name_play)).Progress_mc.Progress.width = H_I_Value.Progress_Menu[H_I_Value.Index]
 							H_I_Value.Progress_Menu[H_I_Value.Index] =location_*2
 							
@@ -1087,7 +1283,6 @@ public class H_I_mainMenuManager extends MovieClip {
 					}
 					if(H_I_Value.is_CP[H_I_Value.Index-1]=="false")
 					{
-						//trace("MovieClip(parent).seek_tml.isgoto   "+MovieClip(this).seek_tml.isgoto)
 						seek_tml.lnght_ = mc__.totalFrames;
 						seek_tml.setSeekLocation(back_motion_loc(mc__))
 						if(H_I_Value.IS_MOUSE_UP && mc__.currentFrame==mc__.totalFrames && MovieClip(this).seek_tml.isgoto)
