@@ -17,6 +17,12 @@
 			menuSymbol = menuSymbol_;
 			H_I_Value.All_path = new Array();
 			H_I_Value.Pdf_Array= new Array();
+			
+			H_I_Value.padkast_Array= new Array();
+			H_I_Value.takalif_Array= new Array();
+			H_I_Value.azmoon_Array= new Array();
+			
+			
 			H_I_Value.Names_Menu_Button = new Array();
 			H_I_Value.Jump_Array =new Array();
 			H_I_Value.mode_ = new Array();
@@ -53,6 +59,29 @@
 				if(xml[0].node[i].@type=="slid")
 				{
 					ci+=1
+					
+					if(xml[0].node[i].@pakdastF != undefined)
+						H_I_Value.padkast_Array.push(String(xml[0].node[i].@pakdastF))
+					else
+					{
+						H_I_Value.padkast_Array.push(null)
+					}
+					
+					if(xml[0].node[i].@takalifF != undefined)
+						H_I_Value.takalif_Array.push(String(xml[0].node[i].@takalifF))
+					else
+					{
+						H_I_Value.takalif_Array.push(null)
+					}
+					
+					if(xml[0].node[i].@azmoonF != undefined)
+						H_I_Value.azmoon_Array.push(String(xml[0].node[i].@azmoonF))
+					else
+					{
+						H_I_Value.azmoon_Array.push(null)
+					}
+					
+					
 					if(xml[0].node[i].@pdf != undefined)
 						H_I_Value.Pdf_Array.push(String(xml[0].node[i].@pdf))
 					else
@@ -86,6 +115,28 @@
 						ci+=1;
 						H_I_Value.mode_.push(String(xml[0].node[i].node[j].@mode))
 						
+						if(xml[0].node[i].node[j].@pakdastF != undefined)
+							H_I_Value.padkast_Array.push(String(xml[0].node[i].node[j].@pakdastF))
+						else
+						{
+							H_I_Value.padkast_Array.push(null)
+						}
+						
+						if(xml[0].node[i].node[j].@takalifF != undefined)
+							H_I_Value.takalif_Array.push(String(xml[0].node[i].node[j].@takalifF))
+						else
+						{
+							H_I_Value.takalif_Array.push(null)
+						}
+						
+						if(xml[0].node[i].node[j].@azmoonF != undefined)
+							H_I_Value.azmoon_Array.push(String(xml[0].node[i].node[j].@azmoonF))
+						else
+						{
+							H_I_Value.azmoon_Array.push(null)
+						}
+						
+						
 						if(xml[0].node[i].node[j].@pdf != undefined)
 							H_I_Value.Pdf_Array.push(String(xml[0].node[i].node[j].@pdf))
 						else
@@ -117,6 +168,30 @@
 						{
 							ci+=1
 							H_I_Value.mode_.push(String(xml[0].node[i].node[j].node[k].@mode))
+							
+							
+							if(xml[0].node[i].node[j].node[k].@pakdastF != undefined)
+								H_I_Value.padkast_Array.push(String(xml[0].node[i].node[j].node[k].@pakdastF))
+							else
+							{
+								H_I_Value.padkast_Array.push(null)
+							}
+							
+							if(xml[0].node[i].node[j].node[k].@takalifF != undefined)
+								H_I_Value.takalif_Array.push(String(xml[0].node[i].node[j].node[k].@takalifF))
+							else
+							{
+								H_I_Value.takalif_Array.push(null)
+							}
+							
+							if(xml[0].node[i].node[j].node[k].@azmoonF != undefined)
+								H_I_Value.azmoon_Array.push(String(xml[0].node[i].node[j].node[k].@azmoonF))
+							else
+							{
+								H_I_Value.azmoon_Array.push(null)
+							}
+							
+							
 							
 							if(xml[0].node[i].node[j].node[k].@pdf != undefined)
 								H_I_Value.Pdf_Array.push(String(xml[0].node[i].node[j].node[k].@pdf))
