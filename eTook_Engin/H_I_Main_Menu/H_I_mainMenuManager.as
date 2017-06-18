@@ -59,12 +59,12 @@ public class H_I_mainMenuManager extends MovieClip {
 		private var help_load:Loader;
 
         /**Media parameters to save last status to the server*/
-		private static var 	userid:uint = 2,
-                            courseid:uint = 12,
-							idnumber:uint = 1;
+		private static var 	userid:uint = 0,
+                            courseid:uint = 0,
+							idnumber:uint = 0;
 
         /**Change it to null on final release*/
-        private static var debugSWF_URL:String = null,//"http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf?courseid=12&userid=185&idnumber=1",
+        private static var debugSWF_URL:String = null,//"http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf",//?courseid=12&userid=185&idnumber=1
                             debugDomain:String = null;//"http://etooklms.com/";
 
         /**State saver interval in miliseconds*/
@@ -99,8 +99,17 @@ public class H_I_mainMenuManager extends MovieClip {
                 addDebugger("The SWF's domain is not detectable.\nSWF URL is : "+swfURL+"\nDetected Domain is : "+domainList);
                 return ;
             }
-
-            var OtherParams:URLVariables = new URLVariables(swfURL.substring(swfURL.lastIndexOf('?')+1));
+			
+			try
+			{
+				var OtherParams:URLVariables = new URLVariables(swfURL.substring(swfURL.lastIndexOf('?')+1));
+			
+			}
+			catch(e)
+			{
+				addDebugger("No parameter passed to swf file.");
+                return;
+			}
             trace("Detected params are : "+JSON.stringify(OtherParams));
             userid = uint(OtherParams.userid) ;
             courseid = uint(OtherParams.courseid) ;
