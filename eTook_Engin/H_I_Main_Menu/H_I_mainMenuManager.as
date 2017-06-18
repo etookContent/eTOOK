@@ -91,7 +91,7 @@ public class H_I_mainMenuManager extends MovieClip {
                 swfURL = debugSWF_URL ;
             }
 
-            var domainList:Array = swfURL.match(/http[s]{0,1}:\/\/[a-z\d\.]+[\\\/]/i);
+            var domainList:Array = swfURL.match(/http[s]{0,1}:\/\/[a-z\d\.\_\-]+[\\\/]/i);
             domain = (domainList!=null)?domainList[0]:debugDomain;
             trace("Founded domain is : "+domain);
 
