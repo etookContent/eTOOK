@@ -64,8 +64,9 @@ public class H_I_mainMenuManager extends MovieClip {
 							idnumber:uint = 0;
 
         /**Change it to null on final release*/
-        private static var debugSWF_URL:String = null,//"http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf",//?courseid=12&userid=185&idnumber=1
-                            debugDomain:String = null;//"http://etooklms.com/";
+        private static var debugSWF_URL:String = null,//"http://etooklms.com/pluginfile.php/1941/mod_resource/content/2/parameter_detect.swf?courseid=12&userid=185&idnumber=2",//
+                            debugDomain:String = null,//"http://etooklms.com/";
+							domain:String=null;//The domain name will detect from URL
 
         /**State saver interval in miliseconds*/
         private static const SaveDelay:uint = 10000 ;
@@ -91,7 +92,7 @@ public class H_I_mainMenuManager extends MovieClip {
             }
 
             var domainList:Array = swfURL.match(/http[s]{0,1}:\/\/[a-z\d\.]+[\\\/]/i);
-            var domain:String = (domainList!=null)?domainList[0]:debugDomain;
+            domain = (domainList!=null)?domainList[0]:debugDomain;
             trace("Founded domain is : "+domain);
 
             if(domain==null)
@@ -123,7 +124,6 @@ public class H_I_mainMenuManager extends MovieClip {
 
 
 			ServiceBase.setUp(domain,tocken);
-            loadCurrentState();
 		}
 
     /**Add the debugger to the stage*/
@@ -152,7 +152,12 @@ public class H_I_mainMenuManager extends MovieClip {
 
     /**Get the user last status from server*/
     private function loadCurrentState(e:*=null):void {
-
+		
+		 if(userid==0 || courseid==0 || idnumber==0 || domain==null)
+		 {
+			trace("Cannot load cource ids");
+			return ;
+		 }
         var srevice1:local_playertrack_get_progress = new local_playertrack_get_progress();
         srevice1.addEventListener(Event.COMPLETE, onLastStateLoaded);
         srevice1.addEventListener(IOErrorEvent.IO_ERROR, loadCurrentState);//Reload last state
@@ -1046,6 +1051,9 @@ public class H_I_mainMenuManager extends MovieClip {
 			on_off();
 			disable();
 			set_position_y();
+			
+			//Load the server cash
+			loadCurrentState();
 		}
 		private function on_off()
 		{
